@@ -1,26 +1,26 @@
 # MoodFly 🪰🧠
 
-Тамагочи, только у питомца настоящий мозг.
-В основе проекта лежит спайковая модель центрального мозга дрозофилы (Drosophila melanogaster), собранная по официальному коннектому FlyWire — полной карте связей между ~61 000 нейронов.
+A Tamagotchi whose pet has a real brain.
+The project is built on a spiking model of the central brain of the fruit fly (Drosophila melanogaster), assembled from the official FlyWire connectome — a complete wiring map of ~61,000 neurons.
 
-Муху можно обучать, откликаться на имя, прокачивать ей гены и отправлять на арену биться с мухами других игроков по локальной сети.
+You can train your fly, teach it to respond to its name, upgrade its genes, and send it to the arena to fight other players' flies over the local network.
 
-![Муха ест сахар, взлетает от тени и избегает горького; справа — живая активность её мозга и эмоции](docs/media/moodfly-demo.gif)
+![The fly eats sugar, takes off from a looming shadow and avoids bitter food; on the right — live activity of its brain and its emotions](docs/media/moodfly-demo.gif)
 
 <details>
-<summary>Бой на арене</summary>
+<summary>Arena fight</summary>
 
-![Бой двух мух: уклонения через гигантское волокно DNp01 и нокаут](docs/media/moodfly-fight.gif)
+![Two flies fighting: giant-fiber (DNp01) escapes and a knockout](docs/media/moodfly-fight.gif)
 
 </details>
 
 <details>
-<summary>Скриншоты</summary>
+<summary>Screenshots</summary>
 
 | | |
 |---|---|
-| ![Муха ест сахар](docs/media/screenshot-feeding.png) | ![Взлёт от угрозы](docs/media/screenshot-takeoff.png) |
-| ![Мозг питомца](docs/media/screenshot-brain.png) | ![Геном и характеристики](docs/media/screenshot-genome.png) |
-| ![Бой](docs/media/screenshot-fight.jpg) | ![Нокаут](docs/media/screenshot-knockout.jpg) |
+| ![Fly eating sugar](docs/media/screenshot-feeding.png) | ![Takeoff from a threat](docs/media/screenshot-takeoff.png) |
+| ![The pet's brain](docs/media/screenshot-brain.png) | ![Genome and stats](docs/media/screenshot-genome.png) |
+| ![Fight](docs/media/screenshot-fight.jpg) | ![Knockout](docs/media/screenshot-knockout.jpg) |
 
 </details>
