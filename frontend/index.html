@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MoodFly</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='42' fill='%23d55181'/></svg>">
+  <link rel="stylesheet" href="style.css">
+  <script type="importmap">
+    { "imports": { "three": "./vendor/three.module.js", "three/addons/OrbitControls.js": "./vendor/OrbitControls.js" } }
+  </script>
+</head>
+<body>
+  <header>
+    <h1>MoodFly</h1>
+    <nav class="tabs">
+      <button class="tab active" data-view="pet">Мой питомец</button>
+      <button class="tab" data-view="arena">Арена <span class="badge" id="live-badge" hidden></span></button>
+    </nav>
+    <div class="status">
+      <span><i class="dot" id="conn-dot"></i><span id="conn">подключение…</span></span>
+      <span id="me-chip"></span>
+      <span title="Секунд работы мозга за секунду реального времени">запас <b id="st-speed">–</b></span>
+    </div>
+  </header>
+
+  <div id="toasts"></div>
+
+  <main id="view-pet" class="view">
+    <section class="panel" id="arena-panel">
+      <h2><span id="pet-title">Питомец</span> <small id="pet-sub"></small></h2>
+      <div class="toolbar" id="tools">
+        <button class="tool active" data-tool="sugar">Сахар</button>
+        <button class="tool" data-tool="bitter">Горькое</button>
+        <button class="tool" data-tool="water">Вода</button>
+        <button class="tool" data-tool="odor_good">Уксус</button>
+        <button class="tool" data-tool="odor_bad">Гниль</button>
+        <button class="tool" data-tool="threat">Угроза</button>
+        <button class="tool" data-tool="remove">Убрать</button>
+        <span class="sep"></span>
+        <button class="btn" id="btn-puff">Дунуть</button>
+        <button class="btn active" id="btn-bg" title="Спонтанная активность сенсорных нейронов 1.5 Гц">Фон</button>
+        <button class="btn danger" id="btn-reset" title="Сбросить тело и активность, память останется">Сброс</button>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="arena"></canvas>
+        <div class="behavior" id="behavior">поведение: <b>—</b></div>
+      </div>
+    </section>
+
+    <section class="panel" id="train-panel">
+      <h2>Дрессировка</h2>
+      <form class="chat" id="chat-form" autocomplete="off">
+        <input type="text" id="chat-input" placeholder="Скажите что-нибудь…" maxlength="200">
+        <button class="btn primary" type="submit">Сказать</button>
+      </form>
+      <div class="train-buttons">
+        <button class="btn reward" id="btn-reward">Награда (PAM)</button>
+        <button class="btn punish" id="btn-punish">Наказание (PPL1)</button>
+      </div>
+      <div class="hearing">
+        <div>Слышит: <b id="hearing">—</b></div>
+        <div class="recog"><span>узнавание</span><div class="recog-track"><div class="recog-mid"></div><div class="recog-fill" id="recog-fill"></div></div><span id="recog-val">0</span></div>
+      </div>
+      <div class="words" id="words"></div>
+    </section>
+
+    <section class="panel" id="passport-panel">
+      <h2>Геном и характеристики <small id="pass-sub"></small></h2>
+      <div id="passport"></div>
+      <div class="dna">
+        <canvas id="dna-portrait"></canvas>
+        <canvas id="dna-helix"></canvas>
+      </div>
+      <div class="genes" id="genes"></div>
+      <div id="pass-extra"></div>
+    </section>
+
+    <section class="panel" id="brain-panel">
+      <h2>Мозг питомца</h2>
+      <div class="brain-wrap" id="brain-wrap">
+        <div class="brain-controls"><button class="btn active" id="btn-rotate">вращение</button></div>
+        <div class="brain-legend" id="brain-legend"></div>
+      </div>
+      <div class="stats-line"><span>t <b id="st-t">0</b> с</span><span>спайков/с <b id="st-sps">0</b></span><span>активных <b id="st-active">0</b></span></div>
+    </section>
+
+    <section class="panel" id="emo-panel">
+      <h2>«Эмоции»</h2>
+      <div class="emo-top">
+        <div class="dominant">
+          <div class="mood-dot" id="dom-dot"></div>
+          <div>
+            <div class="name" id="dom-name">Спокойствие</div>
+            <div class="sub" id="dom-sub">валентность 0.00 · возбуждение 0.00</div>
+          </div>
+        </div>
+        <canvas id="circumplex"></canvas>
+      </div>
+      <div class="bars" id="bars"></div>
+      <div class="timeline-wrap">
+        <canvas id="timeline"></canvas>
+        <div class="tooltip" id="tl-tip"></div>
+      </div>
+    </section>
+
+    <section class="panel" id="opto-panel">
+      <h2>Оптогенетика</h2>
+      <div class="opto-row" style="position: relative">
+        <input type="text" id="opto-type" placeholder="тип клеток, напр. DNp01 или PAM*" autocomplete="off" spellcheck="false">
+        <div class="suggest" id="opto-suggest"></div>
+        <input type="range" id="opto-hz" min="10" max="300" step="10" value="120">
+        <span id="opto-hz-val" class="mono">120 Гц</span>
+      </div>
+      <div class="opto-row" style="margin-top: 8px">
+        <button class="btn primary" id="opto-on">Активировать</button>
+        <button class="btn" id="opto-silence">Заглушить</button>
+        <button class="btn danger" id="opto-clear">Снять всё</button>
+      </div>
+      <div class="chips" id="opto-presets"></div>
+      <div class="chips" id="opto-active"></div>
+    </section>
+
+    <section class="panel" id="readouts-panel">
+      <h2>Ключевые нейроны <small>Гц</small></h2>
+      <table class="readouts" id="readouts"></table>
+    </section>
+
+    <section class="panel" id="log-panel">
+      <h2>Журнал</h2>
+      <ul class="log" id="log"></ul>
+    </section>
+  </main>
+
+  <main id="view-arena" class="view arena-view" hidden>
+    <section class="panel" id="roster-panel">
+      <h2>Бойцы</h2>
+      <div id="battles-live"></div>
+      <div id="roster"></div>
+    </section>
+
+    <section class="panel" id="battle-panel">
+      <h2 id="battle-title">Арена <small id="battle-timer"></small></h2>
+      <div class="canvas-wrap fight-wrap">
+        <canvas id="battle-canvas"></canvas>
+        <div class="battle-empty" id="battle-empty">Бой не выбран</div>
+      </div>
+    </section>
+
+    <section class="panel" id="fighters-panel">
+      <h2>Состояние бойцов</h2>
+      <div class="fighters" id="fighters"></div>
+      <div class="brain-switch"><span>Мозг:</span><button class="btn active" data-focus="0" id="focus-0">боец 1</button><button class="btn" data-focus="1" id="focus-1">боец 2</button></div>
+      <div class="brain-wrap small" id="battle-brain-wrap"><div class="brain-legend" id="battle-brain-legend"></div></div>
+    </section>
+
+    <section class="panel" id="battle-log-panel">
+      <h2>Ход боя</h2>
+      <ul class="log" id="battle-log"></ul>
+    </section>
+  </main>
+
+  <div class="overlay" id="auth" hidden>
+    <div class="auth-card">
+      <div class="auth-step" id="auth-nick">
+        <h2>MoodFly</h2>
+        <form id="nick-form" autocomplete="off">
+          <input type="text" id="nick" placeholder="Ник" maxlength="20" required>
+          <button class="btn primary" type="submit">Войти</button>
+        </form>
+      </div>
+      <div class="auth-step" id="auth-pet" hidden>
+        <h2>Как назовёте муху?</h2>
+        <form id="pet-form" autocomplete="off">
+          <input type="text" id="pet-name" placeholder="Имя" maxlength="20" required>
+          <button class="btn primary" type="submit">Родить муху</button>
+        </form>
+      </div>
+      <div class="auth-error" id="auth-error"></div>
+    </div>
+  </div>
+  <div class="overlay" id="overlay">Подключаюсь к серверу…</div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+services:
+  moodfly:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - moodfly-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  moodfly-data:

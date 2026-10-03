@@ -1,0 +1,24 @@
+[project]
+name = "moodfly"
+version = "0.1.0"
+description = "A pet fly driven by a spiking model of the real Drosophila brain (FlyWire connectome): train it, mutate it, fight with it"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=2.0",
+    "pandas>=2.2",
+    "pyarrow>=17",
+    "numba>=0.61",
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+]
+
+[project.scripts]
+moodfly = "moodfly.server:main"
+moodfly-build = "moodfly.build:main"
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
